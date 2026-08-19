@@ -1,0 +1,50 @@
+# Docker Commands — APACE_JATENG
+
+Run these from the project root (`/home/skj/Documents/webapp/APACE_JATENG`).
+
+## Two compose files
+| File                     | Purpose                                        |
+|--------------------------|------------------------------------------------|
+| `docker-compose.dev.yml` | Dev: hot reload, run on localhost             |
+| `docker-compose.yml`     | Prod: built frontend (nginx) at https://jateng.apace-ai.com/ |
+
+## DEV (hot reload — localhost)
+```bash
+docker compose -f docker-compose.dev.yml up -d --build
+docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml logs -f backend
+docker compose -f docker-compose.dev.yml logs -f frontend
+```
+
+## PROD (built + nginx)
+```bash
+docker compose up -d --build   # uses docker-compose.yml by default
+docker compose down
+docker compose logs -f frontend
+```
+
+## One-liner: down → build → up (prod)
+```bash
+docker compose down && docker compose up -d --build
+```
+
+## Useful checks
+```bash
+docker compose ps              # status of all services
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f db
+```
+
+## Ports
+| Service   | Host port |
+|-----------|-----------|
+| frontend  | 8003      |
+| backend   | 8004      |
+| db        | 5436      |
+
+## Cloudflare tunnel
+```bash
+sudo systemctl restart cloudflared
+sudo systemctl status cloudflared
+```
